@@ -1,0 +1,38 @@
+---
+extensions:
+  bearertokenauth:
+      token: ${env:GH_PAT}
+
+receivers:
+  gitprovider:
+    initial_delay: 10s
+    collection_interval: 300s
+    scrapers:
+      github:
+        github_org: "${env:GH_ORG}"
+        search_query: "${env:GH_SEARCH_QUERY}"
+        auth:
+          authenticator: bearertokenauth
+        metrics:
+          git.repository.contributor.count:
+            enabled: true
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    #verbosity: detailed
+  otlphttp/prometheus:
+    endpoint: "http://prometheus:9090/api/v1/otlp"
+    tls:
+      insecure: true
+
+service:
+  ## Add bearertokenauth to the extension list if you want to auth to GitHub
+  extensions: [bearertokenauth]
+  pipelines:
+    metrics:
+      receivers: [gitprovider]
+      processors: [batch]
+      exporters: [logging, otlphttp/prometheus]

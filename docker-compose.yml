@@ -674,6 +674,32 @@ services:
     environment:
       - ENVOY_PORT
 
+  # OpenTelemetry Collector
+  liatrio-otelcol:
+    image: ${LIATRIO_OTEL_IMAGE:-ghcr.io/liatrio/liatrio-otel-collector:0.40.2-arm64}
+    container_name: liatrio-otelcol
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+    restart: unless-stopped
+    command: [ "--config=/etc/otelcol-config.yml"]
+    profiles:
+      - delivery
+    env_file:
+      - ./.liatrio-otelcol.env
+    volumes:
+      - ./src/otelcollector/liatrio-otelcol-config.yml:/etc/otelcol-config.yml
+        # TODO: cleanup
+        #ports:
+        #  - "4317"          # OTLP over gRPC receiver
+        #  - "4318"          # OTLP over HTTP receiver
+    depends_on:
+      - jaeger
+    logging: *logging
+    environment:
+      - ENVOY_PORT
+
   # Prometheus
   prometheus:
     image: quay.io/prometheus/prometheus:v2.48.1
