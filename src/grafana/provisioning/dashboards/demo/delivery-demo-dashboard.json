@@ -954,7 +954,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_open_time{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_merged_time{organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1109,14 +1109,39 @@
         "type": "query"
       },
       {
-        "allValue": "",
         "current": {
           "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values({organization_name=\"$organization\"},team_name)",
+        "description": "The name of the team ",
+        "hide": 0,
+        "includeAll": true,
+        "label": "team",
+        "multi": true,
+        "name": "team",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values({organization_name=\"$organization\"},team_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": true,
           "text": [
-            "All"
+            "aws-managed-services"
           ],
           "value": [
-            "$__all"
+            "aws-managed-services"
           ]
         },
         "datasource": {
