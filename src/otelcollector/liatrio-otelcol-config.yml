@@ -23,10 +23,15 @@ processors:
 exporters:
   logging:
     #verbosity: detailed
-  otlphttp/prometheus:
-    endpoint: "http://prometheus:9090/api/v1/otlp"
-    tls:
-      insecure: true
+
+  # Using the prometheus exporter because resource attributes are dropped
+  # when using the prometheus OTLP feature flag
+  prometheus:
+    endpoint: "${env.HOSTNAME}:9464"
+    resource_to_telemetry_conversion:
+      enabled: true
+    enable_open_metrics: true
+    add_metric_suffixes: false
 
 service:
   ## Add bearertokenauth to the extension list if you want to auth to GitHub
@@ -35,4 +40,4 @@ service:
     metrics:
       receivers: [gitprovider]
       processors: [batch]
-      exporters: [logging, otlphttp/prometheus]
+      exporters: [logging, prometheus]
