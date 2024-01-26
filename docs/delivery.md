@@ -38,7 +38,8 @@ and the [WebHook Event Receiver](https://github.com/open-telemetry/opentelemetry
 which gathers event logs to populate DORA metrics.
 
 ```mermaid
-stateDiagram-v2 Collector --> GitHub: Scrapes
+stateDiagram-v2 
+    Collector --> GitHub: Scrapes
     Collector <-- GitHub: WebHook Events
     Collector <-- Prometheus: Pulls
     Grafana --> Prometheus: Pulls
