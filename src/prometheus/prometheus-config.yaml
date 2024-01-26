@@ -9,7 +9,7 @@ scrape_configs:
   static_configs:
   - targets:
     - 'otelcol:8888'
-- job_name: liatrio-otel-collector
+- job_name: delivery-otel-collector
   static_configs:
   - targets:
-    - 'liatrio-otelcol:9464'
+    - 'delivery-otelcol:9464'

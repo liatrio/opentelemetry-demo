@@ -28,6 +28,8 @@ We'll detail how to setup these things up exactly in a later section.
         - [PAT for GitHub Metrics](#personal-access-token-for-github-metrics)
         - [GitHub App Setup](#github-app-setup-for-webhook-events)
     - [Local Docker Setup](#local-docker-setup)
+        - [Leading Indicators](#leading-delivery-indicators-github)
+        - [Lagging Indicators (DORA)](#lagging-delivery-indicators-dora)
 
 ## Architecture
 
@@ -61,7 +63,10 @@ stateDiagram-v2
 
 ### GitHub App Setup for WebHook Events
 
-1. Create a GitHub App with permissions for `Issues` `Deployments` and `Pull requests` then have it subscribed to `Issues` `Deployment Status` and `Pull request` events while leaving webhooks disabled for now. This can be done by navigating to Settings->Developer Settings->GitHub Apps.
+1. Create a GitHub App with permissions for `Issues` `Deployments` and
+`Pull requests` then have it subscribed to `Issues` `Deployment Status` and
+`Pull request` events while leaving webhooks disabled for now. This can be done
+by navigating to Settings->Developer Settings->GitHub Apps.
 
 <img src="img/new-github-app.png" width="1000">
 
@@ -69,19 +74,33 @@ GitHub App Permissions             |  Github App Event Subscriptions
 :-------------------------:|:-------------------------:
 <img src="img/github-app-permissions.png" width="480">  |   <img src="img/github-app-events.png" width="480">
 
-
-3. Using [Ngrok](https://ngrok.com) or another tool to forward traffic from your GitHub App to your local machine, set up forwarding to `http://localhost:8088/` which is going to be the endpoint for our webhook receiver should it be running locally.
-4. This is going to give you a web address which we will be using as our webhook url in our GitHub App.  Be sure to add `/events` to that address as that is the path that the webhook event receiver will be expecting these event logs at by default.
-5. Uncomment the relevant code in the `collector-config.yaml` and `docker-compose` file in order to setup the tools required for this.
-6. Now you should be all set to start ingesting GitHub event logs. 
+3. Using [Ngrok](https://ngrok.com) or another tool to forward traffic from your
+GitHub App to your local machine, set up forwarding to `http://localhost:8088/`
+which is going to be the endpoint for our webhook receiver should it be running
+locally.
+4. This is going to give you a web address which we will be using as our webhook
+url in our GitHub App.  Be sure to add `/events` to that address as that is the
+path that the webhook event receiver will be expecting these event logs at by default.
 
 #### Requirements
-1. Use GitHub Issues to track outages/interuptions in service caused by a recent deployment
-2. There should only be one issue open at a time with a label called `incident` for all problems caused by the latest deployment
-3. For GitHub to keep track of your deployments, you must be using GitHub Environments inside the workflow that runs the deployment
-4. The workflow also has to be using tooling that deploys your code from GitHub to an external platform or GitHub itself such as [Terraform](https://www.terraform.io)
+1. Use GitHub Issues to track outages/interuptions in service caused by a recent
+deployment
+2. There should only be one issue open at a time with a label called `incident`
+for all problems caused by the latest deployment
+3. For GitHub to keep track of your deployments, you must be using GitHub Environments
+inside the workflow that runs the deployment
+4. The workflow also has to be using tooling that deploys your code from GitHub
+to an external platform or GitHub itself such as [Terraform](https://www.terraform.io)
 
 ## Local Docker Setup
+
+Due to all the pre-requisites for setting up DORA metrics, this portion of the demo
+separates the Leading Indicators portion from the Lagging Indicators portion.
+
+### Leading Delivery Indicators (GitHub)
+
+This portion of the demo runs the Liatrio OTEL Collector with the Git
+Provider Receiver to pull the leading indicators from a set of GitHub repositories.
 
 1. Clone this repository and navigate to the root
 2. Create a `.liatrio-otelcol.env` with the following content:
@@ -91,3 +110,10 @@ GH_ORG=<github org name>
 GH_SEARCH_QUERY="org:${GH_ORG} <any search parameters https://docs.github.com/en/search-github/searching-on-github>"
 ```
 3. Run `make start-delivery`
+
+### Lagging Delivery Indicators (DORA)
+
+This portion is much more intensive. 
+
+1. Ensure you ran through the [GitHub App Setup](#github-app-setup-for-webhook-events)
+2. Run `make start-dora`
