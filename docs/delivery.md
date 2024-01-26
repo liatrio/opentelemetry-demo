@@ -40,8 +40,8 @@ which gathers event logs to populate DORA metrics.
 ```mermaid
 stateDiagram-v2 
     Collector --> GitHub: Scrapes
-    Collector <-- GitHub: WebHook
-    Collector <-- Prometheus: Pulls
+    GitHub --> Collector: WebHook Events
+    Prometheus --> Collector: Pull
     Grafana --> Prometheus: Pulls
 ```
 
