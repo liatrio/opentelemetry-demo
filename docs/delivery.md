@@ -10,18 +10,19 @@ shop. There are two sets of delivery metrics available through this fork:
 
 Both sets of metrics are meant to be leveraged together, yet on their own, still
 provide engineers with valuable data. These metrics capture point-in-time data and
-are meant to be looked at overtime to determine trends of improvemenent.
+are meant to be looked at overtime to determine trends of improvement.
 
 There is some setup required in order to get these metrics working. You will need:
 
-- A personal access token with access to GitHub 
-- A repository setup to emit even logs from GitHub through a webhook based GitHub
+- A personal access token with access to GitHub
+- A repository setup to emit event logs from GitHub through a webhook based GitHub
 app
 - Some mechanism to forward webhook calls to your local machine, like ngrok
 
 We'll detail how to setup these things up exactly in a later section.
 
-**Table of Contents**
+## Table of Contents
+
 - [Delivery Demo](#delivery-demo)
     - [Architecture](#architecture)
     - [Pre-requisites](#pre-requisites)
@@ -33,11 +34,12 @@ We'll detail how to setup these things up exactly in a later section.
 
 ## Architecture
 
-To delivery metrics side of the house relies on the existing architecture of the
-demo but adds in the [Liatrio distribution of the OpenTelemetry](https://github.com/liatrio/liatrio-otel-collector)
-collector to gather metrics from GitHub through the [Git Provider Receiver](https://github.com/liatrio/liatrio-otel-collector/tree/main/receiver/gitproviderreceiver)
-and the [WebHook Event Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/webhookeventreceiver)
-which gathers event logs to populate DORA metrics.
+The `delivery metrics` demo expands on the existing OpenTelemetry demo by using the
+[Liatrio distribution of OpenTelemetry](https://github.com/liatrio/liatrio-otel-collector)
+collector to gather metrics from GitHub through the [Git Provider
+Receiver](https://github.com/liatrio/liatrio-otel-collector/tree/main/receiver/gitproviderreceiver)
+and the [WebHook Event Receiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/webhookeventreceiver).
+This gathered event logs are used populate a DORA metrics dashboard in Grafana.
 
 ```mermaid
 stateDiagram-v2 
