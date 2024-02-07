@@ -674,6 +674,58 @@ services:
     environment:
       - ENVOY_PORT
 
+
+  # node:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.local
+  #   user: node
+  #   profiles:
+  #     - node
+  #   volumes:
+  #     - .:/opt/app
+  #     - ./.gitconfig:/home/node/.gitconfig:ro
+  #     - ~/.cache:/home/node/.cache
+  #     - ~/.aws/:/home/node/.aws/
+  #   ports:
+  #     - 3000:3000
+  #     - 7007:7007
+  #   working_dir: /opt/app
+  #   command: ${COMPOSE_COMMAND:-bash}
+  #   env_file: .env
+
+  backstagedb: 
+    image: postgres
+    container_name: backstagedb
+    profiles: 
+      - backstage
+    logging: *logging
+    env_file: .env
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT
+
+  backstage: 
+    image: liatrio-backstage-node
+    container_name: liatrio-backstage-node-1
+    profiles: 
+      - backstage
+    volumes:
+      - .:/opt/app
+      - ./.gitconfig:/home/node/.gitconfig:ro
+      - ~/.cache:/home/node/.cache
+      - ~/.aws/:/home/node/.aws/
+    ports:
+      - 3000:3000
+      - 7007:7007
+    working_dir: /opt/app
+    command: yarn dev docker-compose --profile node up --build --detach
+    logging: *logging
+    env_file: .env
+    depends_on:
+      - backstagedb
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT
+
   # OpenTelemetry Collector GitProvider Receiver
   delivery-otelcol:
     image: ${LIATRIO_OTEL_IMAGE:-ghcr.io/liatrio/liatrio-otel-collector:0.40.2-arm64}
