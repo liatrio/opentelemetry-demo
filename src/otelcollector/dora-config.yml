@@ -86,7 +86,7 @@ processors:
             value: "reopened|labeled"
 
 exporters:
-  logging:
+  debug:
     #verbosity: detailed
 
   loki:

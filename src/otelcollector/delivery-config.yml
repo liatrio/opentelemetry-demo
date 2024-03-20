@@ -27,7 +27,7 @@ processors:
 
 
 exporters:
-  logging:
+  debug:
     #verbosity: detailed
 
   # Using the prometheus exporter because resource attributes are dropped
@@ -46,4 +46,4 @@ service:
     metrics:
       receivers: [gitprovider]
       processors: [batch, resource/opentelemetry]
-      exporters: [logging, prometheus]
+      exporters: [debug, prometheus]

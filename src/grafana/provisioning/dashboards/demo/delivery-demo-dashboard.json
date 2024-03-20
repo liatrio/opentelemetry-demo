@@ -557,7 +557,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_open_count{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_count{type=\"open\", organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -850,16 +850,16 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "gitprovider-metrics"
+            "uid": "webstore-metrics"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_merged_count{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_count{type=\"merged\", organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
+          "hide": false,
           "includeNullMetadata": true,
           "instant": false,
-          "key": "Q-0b7776a7-47df-4758-b3ba-2640342f1db9-0",
-          "legendFormat": "{{organization_name}}/{{repository_name}}/{{branch_name}}",
+          "legendFormat": "{{organization_name}}/{{repository_name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -954,7 +954,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_merged_time{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_time_to_merge{organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1054,7 +1054,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_approved_time{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_time_to_approval{organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1110,9 +1110,17 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "webstore-metrics"
         },
         "definition": "label_values({organization_name=\"$organization\"},team_name)",
         "description": "The name of the team ",
@@ -1138,10 +1146,10 @@
         "current": {
           "selected": true,
           "text": [
-            "aws-managed-services"
+            "All"
           ],
           "value": [
-            "aws-managed-services"
+            "$__all"
           ]
         },
         "datasource": {
