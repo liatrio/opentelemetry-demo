@@ -562,7 +562,7 @@
           "includeNullMetadata": true,
           "instant": false,
           "key": "Q-0b7776a7-47df-4758-b3ba-2640342f1db9-0",
-          "legendFormat": "{{organization_name}}/{{repository_name}}/{{branch_name}}",
+          "legendFormat": "{{organization_name}}/{{repository_name}}",
           "range": true,
           "refId": "A",
           "useBackend": false
