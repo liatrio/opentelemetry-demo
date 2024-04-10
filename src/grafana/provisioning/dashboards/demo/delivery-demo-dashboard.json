@@ -657,7 +657,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "git_repository_pull_request_open_time{organization_name=\"$organization\", repository_name=~\"$repo\"}",
+          "expr": "git_repository_pull_request_time_open{organization_name=\"$organization\", repository_name=~\"$repo\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
